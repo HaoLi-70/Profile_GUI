@@ -149,7 +149,7 @@ class Voigt(QMainWindow):
     def __createCurveGroupBox(self):
 
       labels=['\u0394\u03BB  [m\u212B]','a  [m\u212B]', 'Number of grids', 
-          'Resulution']
+          'Resulution  [m\u212B]']
         
       self.CurveGroupBox = QGroupBox("")
 
@@ -341,7 +341,7 @@ class Voigt(QMainWindow):
             color='k')
 
       if INPUT['Curve_xlabel'] == False:
-        self.ax.set_xlabel(r'$\lambda$ [$\rm m\AA$]')
+        self.ax.set_xlabel(r'$\lambda$ [$\rm \AA$]')
 
       self.canvas.draw()
 
