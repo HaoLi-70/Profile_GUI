@@ -88,7 +88,10 @@ class Voigt(QMainWindow):
       INPUT['Curve'].append(plt.plot([0],[0]))
       INPUT['Curve_plot'] = []
       INPUT['Curve_plot'].append(False)
+      INPUT['Curve_Type'] = []
+      INPUT['Curve_Type'].append(0)
       INPUT['Curve_xlabel'] = False
+
       self.initUI(main)
       self.libpath()
 
@@ -253,7 +256,8 @@ class Voigt(QMainWindow):
       self.CurveGroupBox.CurveParBox.addItems(['Curve '+str(INPUT['Ncurves'])+': '])
       INPUT['Curve'].append(plt.plot([0],[0]))
       INPUT['Curve_plot'].append(False)
-        
+      INPUT['Curve_Type'].append(0)
+
     def __minus(self, layout):
       INPUT['Ncurves'] = INPUT['Ncurves']-1
       if INPUT['Ncurves'] <1 :
@@ -266,6 +270,7 @@ class Voigt(QMainWindow):
           self.canvas.draw()
         del(INPUT['Curve'][INPUT['Ncurves']])
         del(INPUT['Curve_plot'][INPUT['Ncurves']])
+        del(INPUT['Curve_Type'][INPUT['Ncurves']])
         self.CurveGroupBox.CurveParBox.removeItem(INPUT['Ncurves'])
         
       self.CurveGroupBox.NCurve.setText(str(INPUT['Ncurves']))
@@ -277,6 +282,8 @@ class Voigt(QMainWindow):
         self.CurveGroupBox.cbutton.setStyleSheet(
             f"background-color: {INPUT['Color'][index].name()}"
         )
+      self.CurveGroupBox.CurveTypeBox.setCurrentIndex(INPUT['Curve_Type'][index])
+      
         
     def __get_par(self, i):
       index = self.CurveGroupBox.CurveParBox.currentIndex()
@@ -297,7 +304,7 @@ class Voigt(QMainWindow):
         self.ax = self.figure.add_subplot(111)
 
       index = self.CurveGroupBox.CurveParBox.currentIndex()
-      cindex = self.CurveGroupBox.CurveTypeBox.currentIndex()
+      INPUT['Curve_Type'][index] = self.CurveGroupBox.CurveTypeBox.currentIndex()
 
 
       dnu = float(INPUT['Par'][index][0])/1e3
@@ -318,13 +325,13 @@ class Voigt(QMainWindow):
       for i in range(num):
         c_Lambd[i] = ll[i]
      
-      if cindex == 0:
+      if INPUT['Curve_Type'][index] == 0:
         clib.profile(c_Lambd, c_Nlambd, c_dnu, c_a, c_H, c_L)
-      elif cindex == 1:
+      elif INPUT['Curve_Type'][index] == 1:
         clib.GAUSS_PROFILE(c_Lambd, c_Nlambd, c_dnu, c_H)
-      elif cindex == 2:
+      elif INPUT['Curve_Type'][index] == 2:
         clib.LORENTZ_PROFILE(c_Lambd, c_Nlambd, c_a, c_H)
-      elif cindex == 3:
+      elif INPUT['Curve_Type'][index] == 3:
         clib.profile(c_Lambd, c_Nlambd, c_dnu, c_a, c_L, c_H)
 
 
@@ -450,7 +457,7 @@ class Main(QMainWindow):
 
     def initUI(self):
 
-      self.setWindowTitle("Illustration")
+      self.setWindowTitle("Display")
       self.__window1 = Voigt(self)
 
       layout = QVBoxLayout()
